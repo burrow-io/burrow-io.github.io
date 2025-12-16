@@ -1,16 +1,249 @@
 ---
-
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="Burrow - Home" description="Burrow project case study and documentation">
+  <Navigation />
+  <main class="gradient-background">
+    <div class="container">
+      <section class="hero">
+        <div class="hero-content">
+          <div class="hero-text">
+            <h1><img src={`${import.meta.env.BASE_URL}burrow-title-only.svg`} alt="Burrow" class="hero-title-svg" /></h1>
+            <p class="tagline">
+              A self-hosted data ingestion pipeline and retrieval API that streamlines and accelerates the development of RAG applications
+            </p>
+            <div class="hero-buttons">
+              <a href="/case-study" class="btn-primary">View Case Study</a>
+              <a href="/case-study" class="btn-secondary">Read Docs</a>
+            </div>
+          </div>
+          <div class="hero-logo">
+            <img src={`${import.meta.env.BASE_URL}Transparent Logo Cropped.png`} alt="Burrow Logo" class="hero-logo-img" />
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- White background sections -->
+  <section class="content-sections">
+    <div class="container">
+      <section class="feature-section">
+        <h2>Automated Ingestion Pipeline</h2>
+        <p>
+          [Your content about the automated ingestion pipeline will go here]
+        </p>
+      </section>
+
+      <section class="feature-section">
+        <h2>Retrieval API</h2>
+        <p>
+          [Your content about the retrieval API will go here]
+        </p>
+      </section>
+
+      <section class="feature-section">
+        <h2>Use Cases</h2>
+        <p>
+          [Your content about use cases will go here]
+        </p>
+      </section>
+
+      <section class="feature-section next-steps">
+        <h2>Next Steps</h2>
+        <p>
+          Ready to dive deeper into Burrow? Explore our comprehensive case study or get started with the documentation.
+        </p>
+        <div class="next-steps-buttons">
+          <a href="/case-study" class="btn-primary">Case Study - Learn How We Built Burrow</a>
+          <a href="/case-study" class="btn-secondary">Get Started</a>
+        </div>
+      </section>
+    </div>
+  </section>
+</Layout>
+
+<style>
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-start;
+  margin-top: 2rem;
+}
+
+.btn-primary, .btn-secondary {
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--brand-teal);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 105, 148, 0.4);
+}
+
+.btn-secondary {
+  border: 2px solid var(--brand-teal);
+  color: var(--text-dark);
+}
+
+.btn-secondary:hover {
+  background: var(--brand-teal);
+  color: white;
+}
+
+/* Content sections */
+.content-sections {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 1) 30%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  padding: 2rem 0 4rem 0;
+}
+
+.feature-section {
+  padding: 3rem 0;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.feature-section h2 {
+  font-size: 2.5rem;
+  color: var(--text-dark);
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.feature-section p {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.next-steps {
+  border-top: 2px solid rgba(166, 124, 82, 0.1);
+  padding-top: 4rem;
+}
+
+.next-steps-buttons {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.next-steps-buttons .btn-primary {
+  background: var(--brand-teal);
+  color: white;
+  padding: 1rem 2rem;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.next-steps-buttons .btn-secondary {
+  border: 2px solid var(--brand-teal);
+  color: var(--text-dark);
+  padding: 1rem 2rem;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.next-steps-buttons .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 105, 148, 0.4);
+}
+
+.next-steps-buttons .btn-secondary:hover {
+  background: var(--brand-teal);
+  color: white;
+}
+
+.hero-content {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 4rem;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.hero-text {
+  text-align: left;
+}
+
+.hero-text h1 {
+  margin-bottom: 1.5rem;
+}
+
+.hero-title-svg {
+  height: 4rem;
+  width: auto;
+  display: block;
+}
+
+.tagline {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #4E342E;
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+
+.description {
+  font-size: 1.1rem;
+  color: #6B5B47;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.hero-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-logo-img {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+}
+
+@media (max-width: 768px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .hero-text {
+    text-align: center;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tagline {
+    font-size: 1.1rem;
+  }
+}
+</style>

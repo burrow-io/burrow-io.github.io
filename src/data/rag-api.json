@@ -1,0 +1,429 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Burrow Query API",
+    "description": "Vector database query API for document retrieval",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/query-service"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["Root"],
+        "summary": "Root",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": ["Health"],
+        "summary": "Health Check",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/retrieve": {
+      "post": {
+        "tags": ["Retrieval"],
+        "summary": "Retrieve",
+        "operationId": "retrieve_retrieve_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RetrieveRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetrieveResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/query": {
+      "post": {
+        "tags": ["Query"],
+        "summary": "Query",
+        "operationId": "query_query_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "description": "Service status"
+          },
+          "database_connected": {
+            "type": "boolean",
+            "title": "Database Connected",
+            "description": "Database connection status"
+          },
+          "vector_store_initialized": {
+            "type": "boolean",
+            "title": "Vector Store Initialized",
+            "description": "Vector store initialization status"
+          }
+        },
+        "type": "object",
+        "required": ["status", "database_connected", "vector_store_initialized"],
+        "title": "HealthResponse"
+      },
+      "MetadataFilter": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key",
+            "description": "Metadata key to filter on"
+          },
+          "value": {
+            "title": "Value",
+            "description": "Value to filter by"
+          },
+          "operator": {
+            "$ref": "#/components/schemas/MetadataFilterOperator",
+            "description": "Comparison operator",
+            "default": "=="
+          }
+        },
+        "type": "object",
+        "required": ["key", "value"],
+        "title": "MetadataFilter"
+      },
+      "MetadataFilterOperator": {
+        "type": "string",
+        "enum": ["==", ">", "<", ">=", "<=", "!=", "in", "nin"],
+        "title": "MetadataFilterOperator"
+      },
+      "MetadataFilters": {
+        "properties": {
+          "filters": {
+            "items": {
+              "$ref": "#/components/schemas/MetadataFilter"
+            },
+            "type": "array",
+            "title": "Filters"
+          },
+          "condition": {
+            "type": "string",
+            "title": "Condition",
+            "description": "Logical condition: 'and' or 'or'",
+            "default": "and"
+          }
+        },
+        "type": "object",
+        "title": "MetadataFilters"
+      },
+      "NodeResponse": {
+        "properties": {
+          "node_id": {
+            "type": "string",
+            "title": "Node Id",
+            "description": "Unique node identifier"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text",
+            "description": "Node text content"
+          },
+          "score": {
+            "type": "number",
+            "title": "Score",
+            "description": "Similarity score"
+          },
+          "metadata": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Metadata",
+            "description": "Node metadata"
+          }
+        },
+        "type": "object",
+        "required": ["node_id", "text", "score"],
+        "title": "NodeResponse"
+      },
+      "QueryRequest": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "title": "Query",
+            "description": "Query text"
+          },
+          "top_k": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "title": "Top K",
+            "description": "Number of documents to retrieve",
+            "default": 5
+          },
+          "filters": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MetadataFilters"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Optional metadata filters"
+          }
+        },
+        "type": "object",
+        "required": ["query"],
+        "title": "QueryRequest"
+      },
+      "QueryResponse": {
+        "properties": {
+          "response": {
+            "type": "string",
+            "title": "Response",
+            "description": "Synthesized response"
+          },
+          "source_nodes": {
+            "items": {
+              "$ref": "#/components/schemas/NodeResponse"
+            },
+            "type": "array",
+            "title": "Source Nodes",
+            "description": "Source nodes used"
+          },
+          "query": {
+            "type": "string",
+            "title": "Query",
+            "description": "Original query"
+          }
+        },
+        "type": "object",
+        "required": ["response", "source_nodes", "query"],
+        "title": "QueryResponse"
+      },
+      "RetrieveRequest": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "title": "Query",
+            "description": "Query text for similarity search"
+          },
+          "top_k": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "title": "Top K",
+            "description": "Number of top results to return",
+            "default": 5
+          },
+          "mode": {
+            "$ref": "#/components/schemas/SearchMode",
+            "description": "Search mode: vector, keyword, or hybrid",
+            "default": "vector"
+          },
+          "rerank": {
+            "type": "boolean",
+            "title": "Rerank",
+            "description": "Whether to apply reranking using Cohere Rerank",
+            "default": false
+          },
+          "rerank_top_n": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 50.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rerank Top N",
+            "description": "Number of results after reranking (defaults to top_k)"
+          },
+          "filters": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MetadataFilters"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Optional metadata filters"
+          }
+        },
+        "type": "object",
+        "required": ["query"],
+        "title": "RetrieveRequest"
+      },
+      "RetrieveResponse": {
+        "properties": {
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/NodeResponse"
+            },
+            "type": "array",
+            "title": "Nodes",
+            "description": "Retrieved nodes"
+          },
+          "query": {
+            "type": "string",
+            "title": "Query",
+            "description": "Original query"
+          },
+          "total_results": {
+            "type": "integer",
+            "title": "Total Results",
+            "description": "Number of results returned"
+          }
+        },
+        "type": "object",
+        "required": ["nodes", "query", "total_results"],
+        "title": "RetrieveResponse"
+      },
+      "SearchMode": {
+        "type": "string",
+        "enum": ["vector", "keyword", "hybrid"],
+        "title": "SearchMode"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": ["loc", "msg", "type"],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "APIKeyHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-token"
+      }
+    }
+  }
+}
