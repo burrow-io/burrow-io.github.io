@@ -42,13 +42,32 @@ const ragSecuritySchemes = ragApi.components?.securitySchemes || {};
       <!-- Sidebar Navigation -->
       <aside class="sidebar">
         <nav class="docs-nav">
-          <!-- Pipeline API Section -->
+          <!-- Getting Started Section -->
           <div class="sidebar-nav-section">
-            <button class="sidebar-nav-header" data-section="pipeline-api">
-              <span>Burrow Pipeline API</span>
+            <button class="sidebar-nav-header" data-section="getting-started">
+              <span>Getting Started</span>
               <span class="sidebar-arrow">▶</span>
             </button>
-            <ul class="sidebar-nav-subsections" id="pipeline-api-sections">
+            <ul class="sidebar-nav-subsections" id="getting-started-sections">
+              <li>
+                <a href="#getting-started" class="sidebar-main-section">Quick Start</a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- APIs Section -->
+          <div class="sidebar-nav-section">
+            <button class="sidebar-nav-header" data-section="apis">
+              <span>APIs</span>
+              <span class="sidebar-arrow">▶</span>
+            </button>
+            <ul class="sidebar-nav-subsections" id="apis-sections">
+              <li>
+                <a href="#apis-overview" class="sidebar-main-section">Overview</a>
+              </li>
+              <li>
+                <a href="#pipeline-api" class="sidebar-main-section">Burrow Pipeline API</a>
+              </li>
               {pipelineEndpoints.flatMap(endpoint => {
                 const baseEndpointId = `pipeline-${endpoint.path.replace(/\//g, '-').replace(/^\-+|\-+$/g, '').replace(/[^a-z0-9-]/gi, '-')}`;
                 return endpoint.methods.map((method, index) => {
@@ -85,16 +104,9 @@ const ragSecuritySchemes = ragApi.components?.securitySchemes || {};
                   );
                 });
               })}
-            </ul>
-          </div>
-
-          <!-- Query API Section -->
-          <div class="sidebar-nav-section">
-            <button class="sidebar-nav-header" data-section="query-api">
-              <span>Burrow Query API</span>
-              <span class="sidebar-arrow">▶</span>
-            </button>
-            <ul class="sidebar-nav-subsections" id="query-api-sections">
+              <li>
+                <a href="#rag-api" class="sidebar-main-section">Burrow Query API</a>
+              </li>
               {ragEndpoints.flatMap(endpoint => {
                 const baseEndpointId = `rag-${endpoint.path.replace(/\//g, '-').replace(/^\-+|\-+$/g, '').replace(/[^a-z0-9-]/gi, '-')}`;
                 return endpoint.methods.map((method, index) => {
@@ -125,8 +137,20 @@ const ragSecuritySchemes = ragApi.components?.securitySchemes || {};
       <!-- Main Content -->
       <article class="docs-content">
         <header class="docs-header">
-          <h1>API Documentation</h1>
+          <h1>Documentation</h1>
         </header>
+
+        <section id="getting-started" class="docs-section">
+          <h2>Quick Start</h2>
+          <!-- Content will be added here -->
+        </section>
+
+        <section id="apis-overview" class="docs-section">
+          <h2>Overview</h2>
+          <p>
+            Burrow provides two main APIs for document management and retrieval. The Pipeline API handles document ingestion and processing, while the Query API provides retrieval capabilities for your RAG application.
+          </p>
+        </section>
 
         <section id="pipeline-api" class="docs-section">
           <h2>{pipelineApiInfo.title}</h2>
@@ -242,7 +266,7 @@ const ragSecuritySchemes = ragApi.components?.securitySchemes || {};
         <section id="rag-api" class="docs-section">
           <h2>{ragApiInfo.title}</h2>
           <p>
-            {ragApiInfo.description}. The RAG API provides endpoints for querying documents, retrieving relevant content, and performing vector similarity searches across your ingested data.
+            {ragApiInfo.description} The RAG API provides endpoints for querying documents, retrieving relevant content, and performing vector similarity searches across your ingested data.
           </p>
 
           <div class="api-section">
@@ -1028,15 +1052,15 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Pipeline API section starts expanded
-  const pipelineApiHeader = document.querySelector('[data-section="pipeline-api"]');
-  const pipelineApiSections = document.getElementById('pipeline-api-sections');
-  const pipelineApiArrow = pipelineApiHeader?.querySelector('.sidebar-arrow');
+  // Getting Started section starts expanded
+  const gettingStartedHeader = document.querySelector('[data-section="getting-started"]');
+  const gettingStartedSections = document.getElementById('getting-started-sections');
+  const gettingStartedArrow = gettingStartedHeader?.querySelector('.sidebar-arrow');
 
-  if (pipelineApiHeader && pipelineApiSections && pipelineApiArrow) {
-    pipelineApiHeader.classList.add('active');
-    pipelineApiSections.classList.add('expanded');
-    pipelineApiArrow.textContent = '▼';
+  if (gettingStartedHeader && gettingStartedSections && gettingStartedArrow) {
+    gettingStartedHeader.classList.add('active');
+    gettingStartedSections.classList.add('expanded');
+    gettingStartedArrow.textContent = '▼';
   }
 });
 
