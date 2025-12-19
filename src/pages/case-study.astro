@@ -3,9 +3,9 @@ import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 
 // Process the markdown content dynamically
-import { readFileSync } from 'fs';
+import markdownContentRaw from '../data/case-study-content.md?raw';
 
-const markdownContent = readFileSync(new URL('../data/case-study-content.md', import.meta.url), 'utf-8');
+const markdownContent = markdownContentRaw;
 
 // Parse the markdown content into sections with subsections
 const rawSections = markdownContent.split(/^# /gm);
