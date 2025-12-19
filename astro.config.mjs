@@ -5,8 +5,5 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   site: 'https://burrow-io.github.io',
   base: '/',
-  output: 'static',
-  build: {
-    assets: 'assets'
-  }
+  output: 'static'
 });
