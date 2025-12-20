@@ -242,7 +242,7 @@ Burrow's ingestion pipeline and API create a simple and predictable user experie
 
 A simple command-line interface allows users to easily deploy Burrow to their AWS infrastructure and get started with their pipeline.
 
-For a full step-by-step guide to the CLI and installation, check out our Quick Start Guide.
+For a full step-by-step guide to the CLI and installation, check out our [Quick Start Guide](/docs#quick-start).
 
 # Building Burrow
 

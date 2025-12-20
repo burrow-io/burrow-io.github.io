@@ -214,6 +214,8 @@ function processMarkdownContent(content: string, sectionId: string): string {
     })
     // Convert sub-subsection headers
     .replace(/^### (.+)$/gm, '<h4>$1</h4>')
+    // Convert markdown links
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
     // Convert images
     .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="content-image" />')
     // Convert bold text
@@ -233,14 +235,24 @@ function processMarkdownContent(content: string, sectionId: string): string {
         // Convert numbered list items
         const listItems = lines
           .filter(line => /^\d+\./.test(line.trim()))
-          .map(line => line.replace(/^\d+\. (.+)$/, '<li>$1</li>'))
+          .map(line => {
+            const content = line.replace(/^\d+\. (.+)$/, '$1');
+            // Process links in list items
+            const withLinks = content.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+            return '<li>' + withLinks + '</li>';
+          })
           .join('');
         return '<ol>' + listItems + '</ol>';
       } else if (isUnorderedList) {
         // Convert unordered list items
         const listItems = lines
           .filter(line => /^-/.test(line.trim()))
-          .map(line => line.replace(/^- (.+)$/, '<li>$1</li>'))
+          .map(line => {
+            const content = line.replace(/^- (.+)$/, '$1');
+            // Process links in list items
+            const withLinks = content.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+            return '<li>' + withLinks + '</li>';
+          })
           .join('');
         return '<ul>' + listItems + '</ul>';
       }
@@ -728,6 +740,17 @@ sections.forEach((section, index) => {
 .content-section strong {
   color: #4E342E !important;
   font-weight: 600;
+}
+
+.content-section a,
+.content-body a {
+  color: #006994 !important;
+  text-decoration: underline !important;
+}
+
+.content-section a:hover,
+.content-body a:hover {
+  color: #005a7a !important;
 }
 
 .content-section div p {

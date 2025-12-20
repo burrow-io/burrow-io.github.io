@@ -46,6 +46,14 @@ const ragSecuritySchemes = ragApi.components?.securitySchemes || {};
       <!-- Sidebar Navigation -->
       <aside class="sidebar">
         <nav class="docs-nav">
+          <!-- Quick Start Section -->
+          <div class="sidebar-nav-section">
+            <a href="#quick-start" class="sidebar-nav-header">
+              <span>Quick Start</span>
+              <span class="sidebar-arrow">▶</span>
+            </a>
+          </div>
+          
           <!-- APIs Section -->
           <div class="sidebar-nav-section">
             <button class="sidebar-nav-header" data-section="apis">
@@ -130,6 +138,145 @@ const ragSecuritySchemes = ragApi.components?.securitySchemes || {};
         <header class="docs-header">
           <h1>Documentation</h1>
         </header>
+
+        <section id="quick-start" class="docs-section">
+          <h2>Quick Start</h2>
+          
+          <h3>Deployment and Management</h3>
+          <p>
+            Burrow's CLI, powered by Terraform, automates the deployment and management of AWS infrastructure. It handles everything from provisioning cloud resources to deploying the frontend, so you can focus on using Burrow rather than configuring it.
+          </p>
+
+          <h3>Prerequisites</h3>
+          <p>To get started with Burrow, ensure the following are set up:</p>
+          <ul>
+            <li>An active AWS account</li>
+            <li>
+              <strong>AWS CLI installed and configured</strong> Run <code>aws configure</code> and provide:
+              <ul>
+                <li>AWS Access Key ID</li>
+                <li>AWS Secret Access Key</li>
+                <li>Default region name</li>
+              </ul>
+            </li>
+            <li>
+              <strong>An existing VPC with subnets:</strong>
+              <ul>
+                <li>2 public subnets</li>
+                <li>2 private subnets</li>
+              </ul>
+            </li>
+            <li>Node.js and npm installed on your system</li>
+          </ul>
+
+          <h3>Installation</h3>
+          <p>Clone the burrow-cli repository:</p>
+          <pre><code>git clone https://github.com/burrow-io/burrow-cli.git</code></pre>
+          <p>Navigate to the cloned directory:</p>
+          <pre><code>cd burrow-cli</code></pre>
+          <p>Install the required dependencies:</p>
+          <pre><code>npm install</code></pre>
+
+          <h3>Deploying Burrow</h3>
+          <p>To deploy Burrow infrastructure using the CLI, execute the following command:</p>
+          <pre><code>npm run deploy</code></pre>
+          <p>This command will guide you through the deployment process with interactive prompts:</p>
+
+          <h4>Configuration Prompts</h4>
+          <p>You will be asked to provide the following information, one prompt at a time:</p>
+          <ul>
+            <li><strong>AWS Region</strong> - The region where you want to deploy Burrow (e.g., us-east-1)</li>
+            <li><strong>VPC ID</strong> - Your existing VPC identifier (e.g., vpc-0abcd1234efgh5678)</li>
+            <li><strong>First Public Subnet ID</strong> - Your existing first public subnet</li>
+            <li><strong>Second Public Subnet ID</strong> - Your existing second public subnet</li>
+            <li><strong>First Private Subnet ID</strong> - Your existing first private subnet</li>
+            <li><strong>Second Private Subnet ID</strong> - Your existing second private subnet</li>
+          </ul>
+
+          <h4>Deployment Outputs</h4>
+          <p>Once deployment completes, you'll receive the following information:</p>
+          <ul>
+            <li><strong>CloudFront DNS Name:</strong> The URL to access your Burrow frontend (e.g., https://d1234abcd5678.cloudfront.net)</li>
+            <li><strong>RAG API Key:</strong> Authentication key for making requests to the RAG API</li>
+            <li><strong>Admin Password:</strong> Credentials for logging into the frontend dashboard</li>
+          </ul>
+          <p>Save these outputs—you'll need them to access and use Burrow.</p>
+
+          <h3>Accessing the User Interface</h3>
+          <p>Once deployment is complete, navigate to the CloudFront DNS URL provided in the deployment outputs.</p>
+
+          <h4>Logging In</h4>
+          <p>Use the admin credentials from the deployment output to log into the dashboard:</p>
+          <ul>
+            <li><strong>Username:</strong> admin</li>
+            <li><strong>Password:</strong> [provided during deployment]</li>
+          </ul>
+
+          <h4>Using the Dashboard</h4>
+          <p>From the UI, you can:</p>
+          <ul>
+            <li>Upload documents for processing through a simple drag-and-drop interface</li>
+            <li>View document metadata including name, size, upload date, and processing status</li>
+            <li>Track processing progress as documents move through different stages</li>
+            <li>Monitor status updates delivered via server-sent events from the Management API</li>
+          </ul>
+          <p>The event-driven architecture means you simply upload documents and Burrow handles everything else behind the scenes—no manual intervention required.</p>
+
+          <h3>Querying Documents</h3>
+          <p>Once documents are processed, you can query them using the RAG API.</p>
+
+          <h4>Making API Requests</h4>
+          <p>Use the Query API key provided during deployment to authenticate your requests. All requests go through your CloudFront distribution:</p>
+          <pre><code>{`curl -X POST https://your-cloudfront-dns/query-service \\
+  -H 'x-api-token: YOUR_API_KEY' \\
+  -H 'Content-Type: application/json' \\
+  -d '{
+    "query": "What are the main topics discussed?",
+    "top_k": 5
+  }'`}</code></pre>
+
+          <h4>Advanced RAG Features</h4>
+          <p>The Query API supports multiple retrieval techniques:</p>
+          <ul>
+            <li><strong>Keyword Search:</strong> Traditional term-based matching</li>
+            <li><strong>Semantic Search:</strong> Vector similarity using embeddings</li>
+            <li><strong>Hybrid Search:</strong> Combines keyword and semantic approaches</li>
+            <li><strong>Reranking:</strong> Re-orders results for improved relevance</li>
+            <li><strong>Metadata Filtering:</strong> Filter by document properties (date, type, etc.)</li>
+          </ul>
+          <p>These features enable you to retrieve the most relevant document chunks for feeding into your LLM-powered RAG applications.</p>
+
+          <h3>Destroying Burrow Infrastructure</h3>
+          <p>To tear down the Burrow infrastructure, run the following command:</p>
+          <pre><code>npm run destroy</code></pre>
+          <p>This command will perform the following steps:</p>
+
+          <h4>Resource Destruction</h4>
+          <p>Deletes all Burrow-related resources in your AWS account, including:</p>
+          <ul>
+            <li>CloudFront distribution</li>
+            <li>S3 buckets (frontend assets and document storage)</li>
+            <li>Application Load Balancer</li>
+            <li>ECS clusters and services</li>
+            <li>DynamoDB tables</li>
+            <li>RDS Aurora database</li>
+            <li>EventBridge rules and targets</li>
+            <li>Security groups and IAM roles</li>
+          </ul>
+
+          <h4>Preserved Resources</h4>
+          <p>The following resources will not be deleted:</p>
+          <ul>
+            <li>Your VPC</li>
+            <li>Public and private subnets you provided</li>
+          </ul>
+          <p>This allows you to safely destroy Burrow without affecting other infrastructure in your AWS account.</p>
+          <p>Terraform will display progress as resources are destroyed.</p>
+
+          <h4>Confirmation</h4>
+          <p>Once complete, you will receive a confirmation message that all Burrow resources have been removed.</p>
+          <p><strong>⚠️ Important:</strong> Destroying the infrastructure will permanently delete all associated resources and data, including uploaded documents and vector embeddings. This action is irreversible, so proceed with caution.</p>
+        </section>
 
         <section id="apis-overview" class="docs-section">
           <h2>Overview</h2>
@@ -464,6 +611,7 @@ const ragSecuritySchemes = ragApi.components?.securitySchemes || {};
   cursor: pointer;
   color: #4E342E;
   font-size: 1.05rem;
+  text-decoration: none;
   font-weight: 600;
   transition: all 0.2s ease;
   border-radius: 8px;
