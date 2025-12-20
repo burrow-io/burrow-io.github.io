@@ -167,7 +167,7 @@ function splitContentAtText(content: string, searchText: string): [string, strin
 }
 
 // Diagram configuration for each section
-const diagramConfig: Record<string, Array<{ text: string; src: string; alt: string; position: string }>> = {
+const diagramConfig: Record<string, Array<{ text: string; src: string; alt: string; position: string; caption?: string }>> = {
   'Background': [
     { text: 'This unwelcome phenomenon is known as "hallucination".', src: '/diagrams/background-section/llm-training.svg', alt: 'LLM Training Diagram', position: 'after' },
     { text: '"Squirrel" and "Chipmunk" are positioned close to each other in the embedding space while "Piano" is further away.', src: '/diagrams/background-section/vectors-graph.svg', alt: 'Vectors Graph Diagram', position: 'after' },
@@ -176,7 +176,7 @@ const diagramConfig: Record<string, Array<{ text: string; src: string; alt: stri
   ],
   'The Current RAG Landscape': [
     { text: 'Multi-column layouts are read straight across from left to right, header hierarchies are flattened into plain text, and tables lose their row and column relationships.', src: '/diagrams/current-rag-landscape/bad-parsing.svg', alt: 'Bad Parsing Diagram', position: 'after' },
-    { text: 'A query like "error code 0x80070005" might return chunks for semantically related error discussions, but overlook results mentioning that exact code.', src: '/diagrams/current-rag-landscape/innacurate-vector-search.svg', alt: 'Inaccurate Vector Search Diagram', position: 'after' },
+    { text: 'A query like "error code 0x80070005" might return chunks for semantically related error discussions, but overlook results mentioning that exact code.', src: '/diagrams/current-rag-landscape/innacurate-vector-search.svg', alt: 'Inaccurate Vector Search Diagram', position: 'after', caption: 'An example of vector search finding a similar but irrelevant result' },
     { text: 'This approach leverages each technique\'s strengths while minimizing its weaknesses.', src: '/diagrams/current-rag-landscape/keyword-vector-search.svg', alt: 'Keyword Vector Search Diagram', position: 'after' },
     { text: 'The output of the model is a relevance score, which is used to rerank the candidates and return the top results.', src: '/diagrams/current-rag-landscape/reranking.svg', alt: 'Reranking Diagram', position: 'after' },
   ],
@@ -185,8 +185,8 @@ const diagramConfig: Record<string, Array<{ text: string; src: string; alt: stri
   ],
   'Walkthrough and Design': [
     { text: 'Hosted via CloudFront, it supports multiple users so teams can securely share pipeline access and connect scattered knowledge bases.', src: '/diagrams/introducing-burrow/ui.png', alt: 'Burrow UI Dashboard', position: 'after' },
-    { text: 'Structured JSON is used to preserve key information about the document\'s hierarchical structure, such as filename, page numbers, and element types, as metadata.', src: '/diagrams/introducing-burrow/docling.svg', alt: 'Docling Diagram', position: 'after' },
-    { text: 'Users can configure retrieval behavior with optional parameters to enable enhanced retrieval features:', src: '/diagrams/introducing-burrow/code-snippet.png', alt: 'Code Snippet', position: 'after' },
+    { text: 'Structured JSON is used to preserve key information about the document\'s hierarchical structure, such as filename, page numbers, and element types, as metadata.', src: '/diagrams/introducing-burrow/docling.svg', alt: 'Docling Diagram', position: 'after', caption: 'Docling\'s parsing workflow' },
+    { text: 'Users can configure retrieval behavior with optional parameters to enable enhanced retrieval features:', src: '/diagrams/introducing-burrow/code-snippet.png', alt: 'Code Snippet', position: 'after', caption: 'For more details, see the <a href="/docs">API documentation</a>' },
     { text: 'A simple command-line interface allows users to easily deploy Burrow to their AWS infrastructure and get started with their pipeline.', src: '/diagrams/introducing-burrow/cli-output.png', alt: 'CLI Output', position: 'after' },
   ],
   'Building Burrow': [
@@ -256,14 +256,14 @@ function processMarkdownContent(content: string, sectionId: string): string {
 }
 
 // Split content based on diagram configuration
-function splitContentForDiagrams(content: string, title: string): { parts: string[]; diagrams: Array<{ src: string; alt: string }> } {
+function splitContentForDiagrams(content: string, title: string): { parts: string[]; diagrams: Array<{ src: string; alt: string; caption?: string }> } {
   const config = diagramConfig[title];
   if (!config || config.length === 0) {
     return { parts: [content], diagrams: [] };
   }
 
   const parts: string[] = [];
-  const diagrams: Array<{ src: string; alt: string }> = [];
+  const diagrams: Array<{ src: string; alt: string; caption?: string }> = [];
   let remainingContent = content;
 
   for (const diagram of config) {
@@ -278,7 +278,7 @@ function splitContentForDiagrams(content: string, title: string): { parts: strin
       const [before, after] = splitContentBeforeText(remainingContent, diagram.text);
       if (after) {
         parts.push(before);
-        diagrams.push({ src: diagram.src, alt: diagram.alt });
+        diagrams.push({ src: diagram.src, alt: diagram.alt, caption: diagram.caption });
         remainingContent = after;
         if (title === 'Building Burrow') {
           console.log(`✓ Found and split for "${diagram.alt}"`);
@@ -293,7 +293,7 @@ function splitContentForDiagrams(content: string, title: string): { parts: strin
       const [before, after] = splitContentAtText(remainingContent, diagram.text);
       if (after) {
         parts.push(before);
-        diagrams.push({ src: diagram.src, alt: diagram.alt });
+        diagrams.push({ src: diagram.src, alt: diagram.alt, caption: diagram.caption });
         remainingContent = after;
         if (title === 'Building Burrow') {
           console.log(`✓ Found and split for "${diagram.alt}"`);
@@ -361,7 +361,7 @@ const sections = rawSections
     // Process markdown to HTML
     let processedContent = '';
     let contentParts: string[] = [];
-    let diagrams: Array<{ src: string; alt: string }> = [];
+    let diagrams: Array<{ src: string; alt: string; caption?: string }> = [];
 
     try {
       processedContent = processMarkdownContent(content, id);
@@ -439,6 +439,9 @@ sections.forEach((section, index) => {
                 {partIndex < section.diagrams.length && (
                   <div class="diagram-container">
                     <img src={section.diagrams[partIndex].src} alt={section.diagrams[partIndex].alt} class="diagram" />
+                    {section.diagrams[partIndex].caption && (
+                      <p class="diagram-caption" set:html={section.diagrams[partIndex].caption}></p>
+                    )}
                   </div>
                 )}
               </>
@@ -859,12 +862,23 @@ sections.forEach((section, index) => {
   font-size: 1rem;
 }
 
+.diagram-container .diagram-caption,
 .diagram-caption {
-  color: #6B5B47;
-  font-size: 0.9rem;
-  text-align: center;
-  margin-top: 0.5rem;
-  font-style: italic;
+  color: #6B5B47 !important;
+  font-size: 0.95rem !important;
+  text-align: center !important;
+  margin-top: 0.5rem !important;
+  font-style: italic !important;
+  line-height: 1.4 !important;
+}
+
+.diagram-caption a {
+  color: #006994 !important;
+  text-decoration: underline !important;
+}
+
+.diagram-caption a:hover {
+  color: #005a7a !important;
 }
 
 @media (max-width: 768px) {

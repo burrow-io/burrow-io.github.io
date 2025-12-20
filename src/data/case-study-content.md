@@ -189,8 +189,6 @@ Docling was released by IBM in 2024 to meet growing demand for better document p
 
 Once all text has been extracted from all elements using format-specific parsers, Docling assembles it in the correct order. Structured JSON is used to preserve key information about the document's hierarchical structure, such as filename, page numbers, and element types, as metadata.
 
-Docling's parsing workflow
-
 ### HybridChunker
 
 Docling also includes a built-in chunker that uses this metadata to split content into chunks while respecting the boundaries of document elements. It takes a token limit parameter to determine chunk size. We used 4096 tokens as a default to balance context size and embedding precision.
