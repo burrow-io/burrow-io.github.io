@@ -256,7 +256,7 @@ AWS is a natural fit for Burrow given its breadth of serverless offerings and ev
 
 These components fall into the five distinct subsystems that make up Burrow:
 
-1. Pipeline Managment
+1. Pipeline Management
 2. Event-driven Triggers
 3. Ingestion Task
 4. Vector Store
