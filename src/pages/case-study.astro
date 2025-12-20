@@ -151,17 +151,109 @@ sections.forEach((section, index) => {
           <section id={section.id} class="content-section">
             <h2>{section.title}</h2>
             <div set:html={section.content}></div>
+            {section.id === 'background' && (
+              <>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/background-section/vectors-graph.svg`} alt="Vector Search" class="diagram" />
+                  <p class="diagram-caption">Vector search and embedding space</p>
+                </div>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/background-section/detailed-etl.svg`} alt="RAG Data Processing Pipeline" class="diagram" />
+                  <p class="diagram-caption">The RAG data processing pipeline</p>
+                </div>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/background-section/query-context-retrieval.png`} alt="Query Context Retrieval" class="diagram" />
+                  <p class="diagram-caption">Query context retrieval in RAG systems</p>
+                </div>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/background-section/llm-training.svg`} alt="LLM Training" class="diagram" />
+                  <p class="diagram-caption">LLM training and knowledge limitations</p>
+                </div>
+              </>
+            )}
+            {section.id === 'the-current-rag-landscape' && (
+              <>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/current-rag-landscape/bad-parsing.svg`} alt="Bad Parsing Example" class="diagram" />
+                  <p class="diagram-caption">Example of parsing issues with complex layouts</p>
+                </div>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/current-rag-landscape/keyword-vector-search.svg`} alt="Keyword vs Vector Search" class="diagram" />
+                  <p class="diagram-caption">Comparison of keyword and vector search</p>
+                </div>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/current-rag-landscape/innacurate-vector-search.svg`} alt="Inaccurate Vector Search" class="diagram" />
+                  <p class="diagram-caption">Challenges with vector search accuracy</p>
+                </div>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/current-rag-landscape/reranking.svg`} alt="Reranking Process" class="diagram" />
+                  <p class="diagram-caption">Reranking improves retrieval relevance</p>
+                </div>
+              </>
+            )}
             {section.id === 'introducing-burrow' && (
-              <div class="diagram-container">
-                <img src={`${import.meta.env.BASE_URL}architecture-diagram.png`} alt="Burrow Architecture Diagram" class="diagram" />
-                <p class="diagram-caption">System architecture showing the complete document processing pipeline</p>
-              </div>
+              <>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/introducing-burrow/ui.png`} alt="Burrow UI" class="diagram" />
+                  <p class="diagram-caption">Burrow's web-based dashboard for managing documents</p>
+                </div>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/introducing-burrow/docling.svg`} alt="Docling Parsing Workflow" class="diagram" />
+                  <p class="diagram-caption">Docling's parsing workflow</p>
+                </div>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/introducing-burrow/burrow-table.png`} alt="Burrow Table" class="diagram" />
+                  <p class="diagram-caption">Burrow table structure</p>
+                </div>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/introducing-burrow/cli-output.png`} alt="CLI Output" class="diagram" />
+                  <p class="diagram-caption">Burrow CLI deployment output</p>
+                </div>
+              </>
             )}
             {section.id === 'building-burrow' && (
-              <div class="diagram-container">
-                <img src={`${import.meta.env.BASE_URL}vector-diagram.png`} alt="Vector Embedding Process" class="diagram" />
-                <p class="diagram-caption">Vector embedding process showing how documents are transformed into searchable embeddings</p>
-              </div>
+              <>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/architecture/full.svg`} alt="Burrow Full Architecture Diagram" class="diagram" />
+                  <p class="diagram-caption">System architecture showing the complete document processing pipeline</p>
+                </div>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/architecture/high-level.svg`} alt="High-Level Architecture" class="diagram" />
+                  <p class="diagram-caption">High-level architecture overview</p>
+                </div>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/architecture/ingestion.svg`} alt="Ingestion Pipeline" class="diagram" />
+                  <p class="diagram-caption">Document ingestion pipeline flow</p>
+                </div>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/architecture/file-upload.svg`} alt="File Upload Flow" class="diagram" />
+                  <p class="diagram-caption">File upload and processing flow</p>
+                </div>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/architecture/event-driven.svg`} alt="Event-Driven Architecture" class="diagram" />
+                  <p class="diagram-caption">Event-driven architecture pattern</p>
+                </div>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/architecture/rag-api.svg`} alt="RAG API Flow" class="diagram" />
+                  <p class="diagram-caption">RAG API retrieval flow</p>
+                </div>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/architecture/indexes.svg`} alt="Database Indexes" class="diagram" />
+                  <p class="diagram-caption">Database indexes for vector, keyword, and metadata search</p>
+                </div>
+              </>
+            )}
+            {section.id === 'engineering-tradeoffs-and-challenges' && (
+              <>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/challenges/service-vs-task.svg`} alt="Service vs Task Architecture" class="diagram" />
+                  <p class="diagram-caption">Event-driven tasks vs long-running service</p>
+                </div>
+                <div class="diagram-container">
+                  <img src={`${import.meta.env.BASE_URL}diagrams/challenges/transaction-prob.svg`} alt="Transaction Problem" class="diagram" />
+                  <p class="diagram-caption">Transaction and consistency challenges</p>
+                </div>
+              </>
             )}
           </section>
         ))}
