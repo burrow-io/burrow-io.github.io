@@ -181,7 +181,7 @@ const diagramConfig: Record<string, Array<{ text: string; src: string; alt: stri
     { text: 'The output of the model is a relevance score, which is used to rerank the candidates and return the top results.', src: '/diagrams/current-rag-landscape/reranking.svg', alt: 'Reranking Diagram', position: 'after' },
   ],
   'Introducing Burrow': [
-    { text: 'What Makes Burrow Unique?', src: '/diagrams/introducing-burrow/burrow-table.png', alt: 'Burrow Table Comparison', position: 'after' },
+    { text: 'What Makes Burrow Unique?', src: '/diagrams/introducing-burrow/table.png', alt: 'Burrow Table Comparison', position: 'after' },
   ],
   'Walkthrough and Design': [
     { text: 'Hosted via CloudFront, it supports multiple users so teams can securely share pipeline access and connect scattered knowledge bases.', src: '/diagrams/introducing-burrow/ui.png', alt: 'Burrow UI Dashboard', position: 'after' },
@@ -415,24 +415,24 @@ sections.forEach((section, index) => {
           <ul class="direct-sections">
             {sections.map((section) => (
               <li class="section-item">
-                <div class="sidebar-main-section-container">
-                  <a href={`#${section.id}`} class="sidebar-main-section">{section.title}</a>
+                  <div class="sidebar-main-section-container">
+                    <a href={`#${section.id}`} class="sidebar-main-section">{section.title}</a>
+                    {section.subsections && section.subsections.length > 0 && (
+                      <button class="subsection-toggle" data-section-id={section.id}>
+                        <span class="subsection-arrow">▶</span>
+                      </button>
+                    )}
+                  </div>
                   {section.subsections && section.subsections.length > 0 && (
-                    <button class="subsection-toggle" data-section-id={section.id}>
-                      <span class="subsection-arrow">▶</span>
-                    </button>
-                  )}
-                </div>
-                {section.subsections && section.subsections.length > 0 && (
-                  <ul class="sidebar-nav-sub-subsections" id={`subsections-${section.id}`}>
+                    <ul class="sidebar-nav-sub-subsections" id={`subsections-${section.id}`}>
                     {section.subsections.map((subsection) => (
                       <li>
                         <a href={`#${subsection.id}`} class="sidebar-subsection">{subsection.title}</a>
                       </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
             ))}
           </ul>
         </nav>
